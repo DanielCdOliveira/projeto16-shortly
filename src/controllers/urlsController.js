@@ -32,12 +32,13 @@ export async function getUrlById(req, res) {
     const id = req.params.id
     console.log(id);
   try {
-    const urlResult =  await connection.query(`
+    const urlResult =  (await connection.query(`
     SELECT "id", "url", "shortUrl" 
     FROM urls
     WHERE id = $1    
-    `,[id])
-    console.log(urlResult);
+    `,[id])).rows[0]
+    if(!urlResult) return res.sendStatus(404)
+    res.status(200).send(urlResult)
   } catch (error) {
     console.log("Error recovering user.");
     console.log(error);
