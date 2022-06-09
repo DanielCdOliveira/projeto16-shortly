@@ -16,14 +16,13 @@ export async function createUrl(req, res) {
     );
     res.status(201).send({ shortUrl });
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 }
 
 export async function getUrlById(req, res) {
   const id = req.params.id;
-  console.log(id);
+
   try {
     const urlResult = (
       await connection.query(
@@ -38,8 +37,6 @@ export async function getUrlById(req, res) {
     if (!urlResult) return res.sendStatus(404);
     res.status(200).send(urlResult);
   } catch (error) {
-    console.log("Error recovering user.");
-    console.log(error);
     return res.sendStatus(500);
   }
 }
@@ -58,15 +55,35 @@ export async function redirectToUrl(req, res) {
       )
     ).rows[0];
     if (!url) return res.sendStatus(404);
-    await connection.query(`
+    await connection.query(
+      `
     UPDATE
     urls
     SET
     "visitCount" = "visitCount" +1
     WHERE "shortUrl"=$1
-    `,[shortUrl])
+    `,
+      [shortUrl]
+    );
     res.redirect(url);
   } catch (error) {
     return res.sendStatus(500);
+  }
+}
+export async function deleteUrl(req, res) {
+  const urlId = req.params.id;
+
+  try {
+    await connection.query(
+      `
+        DELETE
+        FROM urls
+        WHERE id=$1       
+        `,
+      [urlId]
+    );
+    res.sendStatus(204);
+  } catch (error) {
+    res.sendStatus(500);
   }
 }
