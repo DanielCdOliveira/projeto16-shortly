@@ -44,19 +44,29 @@ export async function getUrlById(req, res) {
   }
 }
 
-export async function redirectToUrl(req,res){
-    const shortUrl = req.params.shortUrl
-try {
-    const {url} = (await connection.query(`
+export async function redirectToUrl(req, res) {
+  const shortUrl = req.params.shortUrl;
+  try {
+    const { url } = (
+      await connection.query(
+        `
     SELECT url 
     FROM urls 
-    WHERE "shortUrl"=$1    
-    `,[shortUrl])).rows[0]
-    console.log(url);
-    if(!url) return res.sendStatus(404)
-    res.redirect(url)
-
-} catch (error) {
-    return res.sendStatus(500)
-}
+    WHERE "shortUrl"=$1;
+    `,
+        [shortUrl]
+      )
+    ).rows[0];
+    if (!url) return res.sendStatus(404);
+    await connection.query(`
+    UPDATE
+    urls
+    SET
+    "visitCount" = "visitCount" +1
+    WHERE "shortUrl"=$1
+    `,[shortUrl])
+    res.redirect(url);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
 }
