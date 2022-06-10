@@ -3,7 +3,6 @@ export default async function getUserUrls(req, res) {
   const userIdParams = parseInt(req.params.id);
   const userId = res.locals.userId;
   if (userIdParams !== userId) return res.sendStatus(401);
-  console.log("entrouuu")
   try {
     const infoUser = (
       await connection.query(
@@ -17,7 +16,6 @@ export default async function getUserUrls(req, res) {
         [userId]
       )
     ).rows[0];
-    console.log(infoUser);
     const shortenedUrls = (
       await connection.query(
         `
