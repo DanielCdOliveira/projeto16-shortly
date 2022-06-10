@@ -4,7 +4,6 @@ import { v4 as uuid } from "uuid";
 import connection from "./../db.js";
 
 export async function signUp(req, res) {
-  console.log("entrou");
   const user = req.body;
   try {
     const SALT = 10;
@@ -52,8 +51,6 @@ export async function signIn(req, res) {
     }
     return res.sendStatus(401)
   } catch (error) {
-    console.log("Error recovering user.");
-    console.log(error);
     return res.sendStatus(500);
   }
 }
