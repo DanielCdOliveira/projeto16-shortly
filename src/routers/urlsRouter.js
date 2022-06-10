@@ -8,7 +8,7 @@ import { urlValidation } from "../middlewares/schemaValidation.js";
 const urlRouter = Router();
 
 urlRouter.post("/urls/shorten",tokenValidation,urlValidation,  createUrl);
-urlRouter.get("/urls/:id",  getUrlById);
+urlRouter.get("/urls/:id", getUrlById);
 urlRouter.get("/urls/open/:shortUrl",  redirectToUrl);
 urlRouter.delete("/urls/:id",tokenValidation,checkUrlUser, deleteUrl);
 

@@ -22,7 +22,6 @@ export async function createUrl(req, res) {
 
 export async function getUrlById(req, res) {
   const id = req.params.id;
-
   try {
     const urlResult = (
       await connection.query(
@@ -72,7 +71,6 @@ export async function redirectToUrl(req, res) {
 }
 export async function deleteUrl(req, res) {
   const urlId = req.params.id;
-
   try {
     await connection.query(
       `
