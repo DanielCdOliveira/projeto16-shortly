@@ -18,7 +18,7 @@ export async function signUp(req, res) {
       [user.name, user.email, passwordHash]
     );
 
-    return res.sendStatus(201); // created
+    return res.sendStatus(201);
   } catch (error) {
     if (error.code === "23505") return res.status(409).send(error.detail);
     return res.send(500);
@@ -36,8 +36,7 @@ export async function signIn(req, res) {
         [req.body.email]
       )
     ).rows[0];
-    console.log(user);
-    if (!user) return res.sendStatus(404);
+    if (!user) return res.sendStatus(401);
 
     if (user && bcrypt.compareSync(req.body.password, user.password)) {
       const token = uuid();
@@ -48,11 +47,10 @@ export async function signIn(req, res) {
       `,
         [user.id, token]
       );
-
-      return res.status(200).send(token);
+        
+      return res.status(200).send({token});
     }
-
-    return res.sendStatus(200); // not found
+    return res.sendStatus(401)
   } catch (error) {
     console.log("Error recovering user.");
     console.log(error);
