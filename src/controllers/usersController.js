@@ -1,8 +1,6 @@
 import connection from "../db.js";
 export default async function getUserUrls(req, res) {
-  const userIdParams = parseInt(req.params.id);
   const userId = res.locals.userId;
-  if (userIdParams !== userId) return res.sendStatus(401);
   try {
     const infoUser = (
       await connection.query(
