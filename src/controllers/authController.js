@@ -20,7 +20,7 @@ export async function signUp(req, res) {
     return res.sendStatus(201);
   } catch (error) {
     if (error.code === "23505") return res.status(409).send(error.detail);
-    return res.sendStatus(500);
+    return res.status(500).send(error);
   }
 }
 
