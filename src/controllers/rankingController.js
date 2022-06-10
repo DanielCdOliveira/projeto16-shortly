@@ -7,6 +7,8 @@ try {
     FROM users
     JOIN urls ON urls."userId" = users.id
     GROUP BY users.id
+    ORDER BY "visitCount" 
+    LIMIT 10
     `)).rows
     res.status(200).send(urlArray)
 } catch (error) {
